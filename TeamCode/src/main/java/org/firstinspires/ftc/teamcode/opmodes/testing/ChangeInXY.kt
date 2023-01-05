@@ -10,6 +10,7 @@ class ChangeInXY : BaseAutonomous() {
         drivetrain.odometry()
         drivetrain.move(20, 20, 0,0.7 )
         drivetrain.telemetry()
+        drivetrain.location.x
 
     }
 }
