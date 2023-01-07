@@ -6,20 +6,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class CycleTill5Left extends LinearOpMode{
-    // get the time
-   // double elapsedTime;
-
-
-    // get the time left
     double timeLeft;
     DcMotor rightLiftMotor;
     DcMotor leftLiftMotor;
     Servo servoClaw;
-
+    double cycleTime;
+    int i = 0 ;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         // set up the claw and the lift
         setUp();
 
@@ -29,8 +26,16 @@ public class CycleTill5Left extends LinearOpMode{
         // cycle while the time left is greater than 3 seconds
         while(timeLeft > 3) {
             cycle();
-            //checkTime();
-
+            if (i == 0){
+                cycleTime = getRuntime();
+            }
+            i=1;
+            checkTime();
+            if (checkTime() ) {
+                cycle();
+            }
+            break;
+            // or park
         }
 
     }
@@ -103,5 +108,15 @@ public class CycleTill5Left extends LinearOpMode{
         // stop and reset the encoders
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public boolean checkTime(){
+        // code for checking tie
+        timeLeft = 30 - getRuntime();
+        if ((timeLeft > cycleTime) && timeLeft > 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
