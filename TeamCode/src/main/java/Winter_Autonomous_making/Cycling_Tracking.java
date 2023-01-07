@@ -17,9 +17,9 @@ public class Cycling_Tracking extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ElapsedTime time = new ElapsedTime();
-        time.startTime();  // returns the time at which the time has last reset
-        time.reset(); // resets the time, and also displays the time that the timer was last reset
-        time.time(TimeUnit.SECONDS); // returns the time from the last reset in SECONDS (I hope in seconds)
+//        time.startTime();  // returns the time at which the time has last reset
+//        time.reset(); // resets the time, and also displays the time that the timer was last reset
+//        time.time(TimeUnit.SECONDS); // returns the time from the last reset in SECONDS (I hope in seconds)
 
         // get the x and y position
         Xposition = "drivetrain.location.x";
@@ -35,11 +35,13 @@ public class Cycling_Tracking extends LinearOpMode {
         // next we move the robot to the position and then back
         cycle_time = overallTime; // this marks the time is will take to complete one cycle;
 
-        while((time_left < cycle_time) && time_left > 3 ){
+        while((time_left > cycle_time) && time_left > 3 ){
             // cycle
+
         }
 
         // park
+
 
     }
 }
