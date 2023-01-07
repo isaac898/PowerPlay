@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.Odometry;
+package Winter_Autonomous_making;
+
 
 import java.lang.Math;
 
-public class OdometryTesting01 {
+public class OdometryTesting02 {
 
     // variables for the left encoder
     double delta_left_encoder_pos;
@@ -63,6 +64,7 @@ public class OdometryTesting01 {
 
     }
 }
+
 
 
 
