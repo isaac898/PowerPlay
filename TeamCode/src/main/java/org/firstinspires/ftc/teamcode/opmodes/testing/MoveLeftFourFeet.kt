@@ -7,6 +7,6 @@ import org.firstinspires.ftc.teamcode.opmodes.autonomous.BaseAutonomous as Neutr
 @Autonomous
 class MoveLeftFourFeet : NeutralAutonomous() {
     override fun autonomous() {
-        drivetrain.move(x = -2)
+        drivetrain.move(y = 0, x = -4, heading = 0)
     }
 }

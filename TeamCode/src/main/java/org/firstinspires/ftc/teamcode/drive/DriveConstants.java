@@ -67,10 +67,11 @@ public class DriveConstants {
      */
     // 315.8 MAX VELOCITY
     //  252.6 RECOMMENDED VELOCITY
-    public static double MAX_VEL = 46.4; //
-    public static double MAX_ACCEL = 46.4;
-    public static double MAX_ANG_VEL = Math.toRadians(60);
-    public static double MAX_ANG_ACCEL = Math.toRadians(60);
+    public static double MAX_VEL = 68.8; // actual max velo is 86
+    public static double MAX_ACCEL = 68.8; // old value 46.4
+    public static double MAX_ANG_VEL = Math.toRadians(180); // should be 7 (theoretical value)
+    // max_ang_vel is found by dividing maximum tangential velocity (max velo) by your track width.
+    public static double MAX_ANG_ACCEL = Math.toRadians(180);
 
 
     public static double encoderTicksToInches(double ticks) {

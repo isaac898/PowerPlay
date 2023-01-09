@@ -54,6 +54,11 @@ class Mecanum(
     private lateinit var bl: DcMotorEx
     private lateinit var br: DcMotorEx
     private lateinit var motors: List<DcMotorEx>
+    // odometry pods
+    private lateinit var lo: DcMotorEx
+    private lateinit var ro: DcMotorEx
+    private lateinit var co: DcMotorEx
+
 
     override fun initialize() {
         hubs = hardwareMap.getAll(LynxModule::class.java)
@@ -63,7 +68,14 @@ class Mecanum(
         fr = hardwareMap.get(DcMotorEx::class.java, ::fr.name)
         bl = hardwareMap.get(DcMotorEx::class.java, ::bl.name)
         br = hardwareMap.get(DcMotorEx::class.java, ::br.name)
-        motors = listOf(fl, fr, bl, br)
+
+        // odometry pods
+        lo = hardwareMap.get(DcMotorEx::class.java, ::lo.name)
+        ro = hardwareMap.get(DcMotorEx::class.java, ::ro.name)
+        co = hardwareMap.get(DcMotorEx::class.java, ::co.name)
+
+
+        motors = listOf(fl, fr, bl, br, lo, ro, co)
 
         motors.forEach {
             it.zeroPowerBehavior =
@@ -80,6 +92,10 @@ class Mecanum(
         bl.direction = DcMotorSimple.Direction.REVERSE
         fr.direction = DcMotorSimple.Direction.FORWARD
         br.direction = DcMotorSimple.Direction.FORWARD
+
+        lo.direction = DcMotorSimple.Direction.FORWARD
+        ro.direction = DcMotorSimple.Direction.REVERSE
+        co.direction = DcMotorSimple.Direction.FORWARD
     }
 
 //    fun reset() {
@@ -145,9 +161,9 @@ class Mecanum(
         // bulk read
         hubs.forEach { it.clearBulkCache() }
 
-        val leftCurrentPosition = -fr.currentPosition
-        val rightCurrentPosition = fl.currentPosition
-        val backCurrentPosition = -br.currentPosition
+        val leftCurrentPosition = -lo.currentPosition
+        val rightCurrentPosition = ro.currentPosition
+        val backCurrentPosition = -co.currentPosition
 
         val newHeading =
             (-leftCurrentPosition + rightCurrentPosition) / 2.0 / Y_ODOMETRY_COUNTS_PER_DEGREE
