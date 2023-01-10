@@ -17,7 +17,7 @@ class MoveForwardThree : BaseAutonomous() {
 
 
     override fun autonomous() {
-        drivetrain.move(y = 48, heading = 2.1) // goes to the third box, y = 48
+        drivetrain.move(y = 48, heading = 2.1, power = 0.4 ) // goes to the third box, y = 48
 
         sleep(1000)
 
@@ -43,14 +43,14 @@ class MoveForwardThree : BaseAutonomous() {
         fl.direction = DcMotorSimple.Direction.REVERSE
         bl.direction = DcMotorSimple.Direction.REVERSE
         fr.direction = DcMotorSimple.Direction.FORWARD
-        br.direction = DcMotorSimple.Direction.REVERSE
+        br.direction = DcMotorSimple.Direction.FORWARD
 
-        fl.setPower(0.7)
-        bl.setPower(0.0)
-        fr.setPower(0.0)
+        fl.setPower(-0.7)
+        bl.setPower(-0.7)
+        fr.setPower(0.7)
         br.setPower(0.7)
 
-        sleep(10000)
+        sleep(450)
 
         fl.setPower(0.0)
         bl.setPower(0.0)
@@ -65,7 +65,7 @@ class MoveForwardThree : BaseAutonomous() {
         fr.direction = DcMotorSimple.Direction.FORWARD
         br.direction = DcMotorSimple.Direction.FORWARD
 
-        drivetrain.move(y=12)
+        drivetrain.move(y=12, heading =  90)
 
     }
 

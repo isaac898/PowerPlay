@@ -194,7 +194,7 @@ public class PowerPlayMechanisms extends OpMode {
                 leftLiftPosition = leftLiftMotor.getCurrentPosition();
                 rightLiftMotor.setTargetPosition(rightLiftPosition -= liftIncrement); // this says --> rightliftposition = rightliftposition  - liftincrement
                 leftLiftMotor.setTargetPosition(leftLiftPosition -= liftIncrement);
-                flag = false;
+                flag = false;// 626-848-1207
             }
 
         } else {
