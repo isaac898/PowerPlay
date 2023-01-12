@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package testingMechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,7 +16,7 @@ public class Servo_testing extends OpMode {
         clawServo = hardwareMap.get(Servo.class, "cServo");
         clawServo.setDirection(Servo.Direction.REVERSE);
         clawServo.setPosition(0);
-        telemetry.addData("Motors", "right (%.2f)", clawServo.getPosition());
+        telemetryUpdate();
 
         telemetry.update();
     }
@@ -27,17 +27,25 @@ public class Servo_testing extends OpMode {
             if(flag){
                 position +=0.1;
                 clawServo.setPosition(position);
+                telemetryUpdate();
                 flag = false;
             }
         } else if (gamepad1.b){
             if(flag){
-                position -=0.1;
+                position -= 0.1;
                 clawServo.setPosition(position);
+                telemetryUpdate();
                 flag = false;
             }
         } else {
             flag = true;
+            telemetryUpdate();
         }
 
+    }
+
+    public void telemetryUpdate() {
+        telemetry.addData("Motors", "claw position (%.2f)", clawServo.getPosition());
+        telemetry.update();
     }
 }

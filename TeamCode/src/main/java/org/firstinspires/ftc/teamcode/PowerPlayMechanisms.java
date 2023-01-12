@@ -19,6 +19,7 @@ public class PowerPlayMechanisms extends OpMode {
 
     // VARIABLES FOR THE CLAW
     private Servo claw_servo;
+    private boolean open = true;
 
     // VARIABLES FOR THE FOUR MOTORS
     private DcMotor fl = null;
@@ -37,6 +38,7 @@ public class PowerPlayMechanisms extends OpMode {
     private int liftIncrement = 100;
     boolean flag = true;
 
+    private int position = 0;
 //    private double rArmPosition; <-- irrelevant
 //    private double lArmPosition; <-- irrelevant
 //    private double aIncrement = 0.05; <-- irrelevant
@@ -71,6 +73,8 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the two arm servos
         right_arm = hardwareMap.get(Servo.class, "rServo");
         left_arm = hardwareMap.get(Servo.class, "lServo");
+
+
 
         // set the arm position to the correct positions
         right_arm.setPosition(0.75);
@@ -137,11 +141,16 @@ public class PowerPlayMechanisms extends OpMode {
 
 
         // CODE FOR THE CLAW
-        if (gamepad2.x){                            // open claw
-            claw_servo.setPosition(0.2);
+        if (gamepad2.b) {
+            if(open){
+                claw_servo.setPosition(0.65); // claw is open
+                open = false;
+            } else {
+                open = true;
+            }
 
-        } else if (gamepad2.b) {
-            claw_servo.setPosition(0);
+            claw_servo.setPosition(0.4); // claw is closed
+
         }
 
         // CODE FOR THE LIFT
@@ -203,20 +212,31 @@ public class PowerPlayMechanisms extends OpMode {
 
 
         // CODE FOR LIFTING AND DROPPING THE ARMS
-        if (gamepad2.y){
-            right_arm.setPosition(0.35);
-            left_arm.setPosition(0.65);
-
-        } else if (gamepad2.a){
-            right_arm.setPosition(0.75); // closer to one, means lower
-            left_arm.setPosition(0.25); // closer to zero, means lower
+        if (gamepad2.y){ // go high
+            right_arm.setPosition(0.45);
+            left_arm.setPosition(0.55);
 
         }
+        if (gamepad2.x) { // go mid
+            right_arm.setPosition(0.65); // closer to one, means lower
+            left_arm.setPosition(0.35); // closer to zero, means lower
+        }
 
-        //CODE TO SCORE ON THE GROUND JUNCTION
-        if (gamepad2.dpad_right){
-            right_arm.setPosition(0.7);
-            left_arm.setPosition(0.3);
+        if (gamepad2.a){ // go low
+            right_arm.setPosition(0.95);
+            left_arm.setPosition(0.05);
+        }
+
+
+        if (gamepad1.x){
+            position += 100;
+            rightLiftMotor.setTargetPosition(position);
+            leftLiftMotor.setTargetPosition(position);
+        }
+        if (gamepad1.b) {
+            position -= 100;
+            rightLiftMotor.setTargetPosition(position);
+            leftLiftMotor.setTargetPosition(position);
         }
 
         // set the right arm to 0.6 for the low junction
