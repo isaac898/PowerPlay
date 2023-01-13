@@ -93,7 +93,6 @@ class Mecanum(
         fr.direction = DcMotorSimple.Direction.FORWARD
         br.direction = DcMotorSimple.Direction.FORWARD
 
-        lo.direction = DcMotorSimple.Direction.FORWARD
         ro.direction = DcMotorSimple.Direction.REVERSE
         co.direction = DcMotorSimple.Direction.FORWARD
     }
@@ -161,7 +160,7 @@ class Mecanum(
         // bulk read
         hubs.forEach { it.clearBulkCache() }
 
-        val leftCurrentPosition = -lo.currentPosition
+        val leftCurrentPosition = -bl.currentPosition
         val rightCurrentPosition = ro.currentPosition
         val backCurrentPosition = -co.currentPosition
 
