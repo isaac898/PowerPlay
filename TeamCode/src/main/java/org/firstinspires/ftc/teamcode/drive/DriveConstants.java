@@ -22,7 +22,7 @@ public class DriveConstants {
      * These are motor constants that should be listed online for your motors.
      */
     public static final double TICKS_PER_REV = 537.7;
-    public static final double MAX_RPM = 435;
+    public static final double MAX_RPM = 312;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -32,7 +32,7 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
+    public static final boolean RUN_USING_ENCODER = false;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
@@ -46,7 +46,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.88976; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 9.8; // in
+    public static double TRACK_WIDTH = 14.43; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -67,11 +67,11 @@ public class DriveConstants {
      */
     // 315.8 MAX VELOCITY
     //  252.6 RECOMMENDED VELOCITY
-    public static double MAX_VEL = 68.8; // actual max velo is 86
-    public static double MAX_ACCEL = 68.8; // old value 46.4
-    public static double MAX_ANG_VEL = Math.toRadians(180); // should be 7 (theoretical value)
+    public static double MAX_VEL = 44.27571152215219; // actual max velo is 86
+    public static double MAX_ACCEL = 44.27571152215219; // old value 46.4
+    public static double MAX_ANG_VEL = Math.toRadians(184.02607784577722); // should be 7 (theoretical value)
     // max_ang_vel is found by dividing maximum tangential velocity (max velo) by your track width.
-    public static double MAX_ANG_ACCEL = Math.toRadians(180);
+    public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 
 
     public static double encoderTicksToInches(double ticks) {

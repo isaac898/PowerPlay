@@ -18,6 +18,7 @@ class Imu : Mechanism {
     }
 
     val firstAngle get() = imu.angularOrientation.firstAngle.toDouble()
+
     val allAngles
         get() = Triple(
             imu.angularOrientation.firstAngle.toDouble(),

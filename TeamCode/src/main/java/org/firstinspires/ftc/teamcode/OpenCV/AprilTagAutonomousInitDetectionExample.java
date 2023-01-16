@@ -78,10 +78,10 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     public void initialize() {
 
         //motors
-        fl = hardwareMap.dcMotor.get("FL");
-        bl = hardwareMap.dcMotor.get("BL");
-        fr = hardwareMap.dcMotor.get("FR");
-        br = hardwareMap.dcMotor.get("BR");
+        fl = hardwareMap.dcMotor.get("fl");
+        bl = hardwareMap.dcMotor.get("bl");
+        fr = hardwareMap.dcMotor.get("fr");
+        br = hardwareMap.dcMotor.get("br");
 
         fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -98,8 +98,8 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         left_arm = hardwareMap.get(Servo.class, "lServo");
 
         // set the arm position to the correct positions
-        right_arm.setPosition(0.9);
-        left_arm.setPosition(0.1);
+        right_arm.setPosition(0.95);
+        left_arm.setPosition(0.05);
 
         claw_servo = hardwareMap.get(Servo.class, "cServo");
         claw_servo.setDirection(Servo.Direction.REVERSE);
@@ -229,27 +229,30 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         {
             arm();
             sleep(secondsToMilli(1));
+            timedTranslate(1, 0.3, 2);
             timedTranslate(1, 0.5, 0);
             timedTranslate(1, 0.5, 0);
             timedTranslate(1, -0.5, 0);
-            right_arm.setPosition(0.9);
-            left_arm.setPosition(0.1);
+            right_arm.setPosition(0.95);
+            left_arm.setPosition(0.05);
         } else if (tagOfInterest.id == onedot) {
             arm();
             sleep(secondsToMilli(1));
+            timedTranslate(1, 0.3, 2);
             timedTranslate(1, 0.6, 2);
             sleep(secondsToMilli(1));
             timedTranslate(1, 0.5, 0);
-            right_arm.setPosition(0.9);
-            left_arm.setPosition(0.1);
+            right_arm.setPosition(0.95);
+            left_arm.setPosition(0.05);
         } else if (tagOfInterest.id == threedot) {
             arm();
             sleep(secondsToMilli(1));
+            timedTranslate(1, 0.2, 2);
             timedTranslate(1, 0.6, 1);
             sleep(secondsToMilli(1));
             timedTranslate(1, 0.5, 0);
-            right_arm.setPosition(0.9);
-            left_arm.setPosition(0.1);
+            right_arm.setPosition(0.95);
+            left_arm.setPosition(0.05);
         }
 
 
@@ -274,9 +277,11 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     }
 
     public void arm() {
-        right_arm.setPosition(0.1);
-        left_arm.setPosition(0.9);
+        right_arm.setPosition(0.92); //0.95 lowest
+        left_arm.setPosition(0.08); //0.05 lowest
     }
+
+    //seconds can only be int, so change power if needed to shorten distance, 1 = right, 2 = left, 0 = yk
 
     public void timedTranslate(int seconds, double power, int direction) {
         double flPow = power;

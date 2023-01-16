@@ -1,9 +1,14 @@
 package Winter_Autonomous_making;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import java.lang.Math;
 
-public class OdometryTesting02 {
+@Autonomous
+public class OdometryTesting02 extends LinearOpMode {
 
     // variables for the left encoder
     double delta_left_encoder_pos;
@@ -38,10 +43,21 @@ public class OdometryTesting02 {
     // heading
     double heading;
 
+    private DcMotor fl;
+    private DcMotor fr;
+    private DcMotor bl;
+    private DcMotor br;
 
+
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 
 
     public void odometry() {
+
 
         delta_left_encoder_pos = left_encoder_pos - prev_left_encoder_pos;
         delta_right_encoder_pos = right_encoder_pos - prev_right_encoder_pos;
@@ -63,6 +79,7 @@ public class OdometryTesting02 {
         prev_center_encoder_pos = center_encoder_pos;
 
     }
+
 }
 
 

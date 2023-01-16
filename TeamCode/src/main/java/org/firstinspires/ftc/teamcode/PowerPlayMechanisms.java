@@ -61,10 +61,10 @@ public class PowerPlayMechanisms extends OpMode {
         telemetry.addData("Motors", "right (%.2f)", claw_servo.getPosition());
 
         //SET UP THE MOTORS FOR THE DRIVE TRAIN
-        fl = hardwareMap.get(DcMotor.class, "FL");
-        fr = hardwareMap.get(DcMotor.class, "FR");
-        bl = hardwareMap.get(DcMotor.class, "BL");
-        br = hardwareMap.get(DcMotor.class, "BR");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
 
         //SET THE DIRECTIONS FOR THE MOTORS
         fl.setDirection(DcMotorSimple.Direction.REVERSE); // port 0
@@ -100,8 +100,8 @@ public class PowerPlayMechanisms extends OpMode {
         leftLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // set the motors to run with encoder
-        rightLiftMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        leftLiftMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // set target to zero
         rightLiftMotor.setTargetPosition(0);
@@ -189,8 +189,8 @@ public class PowerPlayMechanisms extends OpMode {
             left_arm.setPosition(0.55);
         }
         if (gamepad2.x) { // go mid
-            right_arm.setPosition(0.65); // closer to one, means lower
-            left_arm.setPosition(0.35); // closer to zero, means lower
+            right_arm.setPosition(0.6); // closer to one, means lower
+            left_arm.setPosition(0.4); // closer to zero, means lower
         }
 
         if (gamepad2.a){ // go low

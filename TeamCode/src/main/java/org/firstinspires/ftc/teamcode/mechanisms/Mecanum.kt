@@ -70,7 +70,6 @@ class Mecanum(
         br = hardwareMap.get(DcMotorEx::class.java, ::br.name)
 
         // odometry pods
-        lo = hardwareMap.get(DcMotorEx::class.java, ::lo.name)
         ro = hardwareMap.get(DcMotorEx::class.java, ::ro.name)
         co = hardwareMap.get(DcMotorEx::class.java, ::co.name)
 
@@ -162,7 +161,7 @@ class Mecanum(
 
         val leftCurrentPosition = -bl.currentPosition
         val rightCurrentPosition = ro.currentPosition
-        val backCurrentPosition = -co.currentPosition
+        val backCurrentPosition = -co.currentPosition // change back to the original
 
         val newHeading =
             (-leftCurrentPosition + rightCurrentPosition) / 2.0 / Y_ODOMETRY_COUNTS_PER_DEGREE
