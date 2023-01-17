@@ -15,7 +15,6 @@
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.kotlin.android'
 
 
 android {
@@ -41,6 +40,6 @@ dependencies {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:+'
     implementation 'org.openftc:apriltag:1.1.0'
+
 }
