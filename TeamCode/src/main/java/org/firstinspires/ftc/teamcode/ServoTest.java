@@ -28,8 +28,8 @@ public class ServoTest extends OpMode {
         rlMotor = hardwareMap.get(DcMotor.class, "rlMotor");
         llMotor = hardwareMap.get(DcMotor.class, "llMotor");
 
-        rlMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        llMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rlMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        llMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // set the motors to run with encoder
         rlMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
