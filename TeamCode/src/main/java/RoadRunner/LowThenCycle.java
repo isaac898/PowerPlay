@@ -87,8 +87,9 @@ public class LowThenCycle extends LinearOpMode {
         if (isStopRequested()) return;
 
         closeClaw();
-        setArms();
         drive.followTrajectory(for16);
+        setArms();
+        sleep(1000);
         drive.turn(Math.toRadians(-50));
         openClaw();
 
@@ -112,7 +113,7 @@ public class LowThenCycle extends LinearOpMode {
         rArm.setPosition(0.85);
         lArm.setPosition(0.15);
         // go forward
-        Trajectory forward2 = drive.trajectoryBuilder(new Pose2d()).forward(20).build();
+        Trajectory forward2 = drive.trajectoryBuilder(new Pose2d()).forward(26).build();
         drive.followTrajectory(forward2);
         // close claw
         closeClaw();
@@ -120,8 +121,10 @@ public class LowThenCycle extends LinearOpMode {
         rArm.setPosition(0.45);
         lArm.setPosition(0.55);
         // go back
-        Trajectory back = drive.trajectoryBuilder(new Pose2d()).back(20).build();
+        Trajectory back = drive.trajectoryBuilder(new Pose2d()).back(26).build();
         drive.followTrajectory(back);
+        // turn 50 degrees
+        drive.turn(Math.toRadians(70));
 
 
 
