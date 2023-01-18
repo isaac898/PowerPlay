@@ -93,6 +93,12 @@ public class PowerPlayMechanisms extends OpMode {
         right_arm = hardwareMap.get(Servo.class, "rServo");
         left_arm = hardwareMap.get(Servo.class, "lServo");
 
+        right_arm.setDirection(Servo.Direction.REVERSE);
+        left_arm.setDirection(Servo.Direction.FORWARD);
+
+        right_arm.setPosition(0);
+        left_arm.setPosition(0);
+
 
 
         // set the direction of the motors
@@ -185,16 +191,16 @@ public class PowerPlayMechanisms extends OpMode {
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
         if (gamepad2.y){ // go high
-            right_arm.setPosition(0.45);
-            left_arm.setPosition(0.55);
+            right_arm.setPosition(0.434);
+            left_arm.setPosition(0.434);
         }
         if (gamepad2.x) { // go mid
-            right_arm.setPosition(0.6); // closer to one, means lower
-            left_arm.setPosition(0.4); // closer to zero, means lower
+            right_arm.setPosition(0.2); // closer to one, means lower
+            left_arm.setPosition(0.2); // closer to zero, means lower
         }
 
         if (gamepad2.a){ // go low
-            right_arm.setPosition(0.95);
+            right_arm.setPosition(0.05);
             left_arm.setPosition(0.05);
         }
 
@@ -203,7 +209,7 @@ public class PowerPlayMechanisms extends OpMode {
             if(flag) {
                 if((right_arm.getPosition() > 0.45) && (left_arm.getPosition() < 0.55)) {
                     leftPosition = left_arm.getPosition() + 0.05;
-                    rightPosition = right_arm.getPosition() - 0.05;
+                    rightPosition = right_arm.getPosition() + 0.05;
                 }
 
                 right_arm.setPosition(rightPosition);
@@ -214,7 +220,7 @@ public class PowerPlayMechanisms extends OpMode {
         } else if (gamepad2.b){
             if(flag){
                 leftPosition = left_arm.getPosition() - 0.05;
-                rightPosition = right_arm.getPosition() + 0.05;
+                rightPosition = right_arm.getPosition() - 0.05;
 
                 right_arm.setPosition(rightPosition);
                 left_arm.setPosition(leftPosition);

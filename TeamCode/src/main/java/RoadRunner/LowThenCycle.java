@@ -73,12 +73,6 @@ public class LowThenCycle extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
     }
 
-    //map out path
-    public void movementCodes() {
-
-
-    }
-
     @Override
     public void runOpMode() throws InterruptedException {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -184,6 +178,7 @@ public class LowThenCycle extends LinearOpMode {
     public void translate(Trajectory movementCode) {
         drive.followTrajectory(movementCode);
     }
+
     public void arms(double position) {
 
     }
