@@ -32,16 +32,7 @@ public class LowThenCycle extends LinearOpMode {
     //drive
     SampleMecanumDrive drive = null;
 
-
-
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        // setting up all the motors and servos
-        telemetry.addData("Status", "initialized ");
-
+    public void initialize() {
         // set up the claw
         cServo = hardwareMap.get(Servo.class, "cServo");
         cServo.setDirection(Servo.Direction.REVERSE);
@@ -80,6 +71,22 @@ public class LowThenCycle extends LinearOpMode {
         telemetry.update();
 
         drive = new SampleMecanumDrive(hardwareMap);
+    }
+
+    //map out path
+    public void movementCodes() {
+
+
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        // setting up all the motors and servos
+        telemetry.addData("Status", "initialized ");
+
+        initialize();
 
         Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
                 .forward(7)
@@ -174,6 +181,9 @@ public class LowThenCycle extends LinearOpMode {
         return drive.trajectoryBuilder(new Pose2d()).back(measurement).build();
     }
 
+    public void translate(Trajectory movementCode) {
+        drive.followTrajectory(movementCode);
+    }
     public void arms(double position) {
 
     }
