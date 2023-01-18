@@ -21,13 +21,16 @@ public class LowThenCycle extends LinearOpMode {
 
     public static double CORRECT = 15;
     // VARIABLES FOR THE CLAW
-    private Servo cServo;
+    private Servo cServo = null;
 
     // VARIABLES FOR THE LIFT
-    private DcMotor rlMotor;
-    private DcMotor llMotor;
-    private Servo rArm;
-    private Servo lArm;
+    private DcMotor rlMotor = null;
+    private DcMotor llMotor = null;
+    private Servo rArm = null;
+    private Servo lArm = null;
+
+    //drive
+    SampleMecanumDrive drive = null;
 
 
 
@@ -76,7 +79,7 @@ public class LowThenCycle extends LinearOpMode {
 
         telemetry.update();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
                 .forward(7)
@@ -97,32 +100,27 @@ public class LowThenCycle extends LinearOpMode {
         // return back to straight
         drive.turn(Math.toRadians(50));
         //go left
-        Trajectory left = drive.trajectoryBuilder(new Pose2d()).strafeLeft(17).build();
-        drive.followTrajectory(left);
+        drive.followTrajectory(left(17));
         drive.turn(Math.toRadians(CORRECT)); // correct
         dropArms();
         // go forward
-        Trajectory forward = drive.trajectoryBuilder(new Pose2d()).forward(48).build();
-        drive.followTrajectory(forward);
+        drive.followTrajectory(forward(48));
         // turn 90
         drive.turn(Math.toRadians(90));
         // strafe right
-        Trajectory right = drive.trajectoryBuilder(new Pose2d()).strafeRight(5).build();
-        drive.followTrajectory(right);
+        drive.followTrajectory(right(5));
         // set the arms to the correct position
         rArm.setPosition(0.85);
         lArm.setPosition(0.15);
         // go forward
-        Trajectory forward2 = drive.trajectoryBuilder(new Pose2d()).forward(26).build();
-        drive.followTrajectory(forward2);
+        drive.followTrajectory(forward(26));
         // close claw
         closeClaw();
         // set arms
         rArm.setPosition(0.45);
         lArm.setPosition(0.55);
         // go back
-        Trajectory back = drive.trajectoryBuilder(new Pose2d()).back(26).build();
-        drive.followTrajectory(back);
+        drive.followTrajectory(back(26));
         // turn 50 degrees
         drive.turn(Math.toRadians(70));
 
@@ -159,6 +157,25 @@ public class LowThenCycle extends LinearOpMode {
     public void dropArms() {
         rArm.setPosition(0.95);
         lArm.setPosition(0.05);
+    }
+
+    public Trajectory left(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).strafeLeft(measurement).build();
+    }
+    public Trajectory right(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).strafeRight(measurement).build();
+    }
+
+    public Trajectory forward(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).forward(measurement).build();
+    }
+
+    public Trajectory back(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).back(measurement).build();
+    }
+
+    public void arms(double position) {
+
     }
 
 }
