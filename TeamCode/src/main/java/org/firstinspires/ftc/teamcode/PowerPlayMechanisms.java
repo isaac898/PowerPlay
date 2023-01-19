@@ -168,13 +168,13 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the lift motors to move to the set positions at the same time
         //works
         if (gamepad2.dpad_up){ // high junction
-            rightLiftMotor.setTargetPosition(1000);
-            leftLiftMotor.setTargetPosition(1000);
+            rightLiftMotor.setTargetPosition(1143);
+            leftLiftMotor.setTargetPosition(1143);
         }
 
         if(gamepad2.dpad_left){ // middle junction
-            rightLiftMotor.setTargetPosition(251);
-            leftLiftMotor.setTargetPosition(251);
+            rightLiftMotor.setTargetPosition(619);
+            leftLiftMotor.setTargetPosition(619);
         }
 
         if(gamepad2.dpad_down){ // go low
@@ -185,17 +185,17 @@ public class PowerPlayMechanisms extends OpMode {
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
         if (gamepad2.y){ // go high
-            right_arm.setPosition(0.45);
-            left_arm.setPosition(0.55);
+            right_arm.setPosition(0.2);
+            left_arm.setPosition(0.8);
         }
         if (gamepad2.x) { // go mid
-            right_arm.setPosition(0.6); // closer to one, means lower
-            left_arm.setPosition(0.4); // closer to zero, means lower
+            right_arm.setPosition(0.55); // closer to one, means lower
+            left_arm.setPosition(0.45); // closer to zero, means lower
         }
 
         if (gamepad2.a){ // go low
-            right_arm.setPosition(0.95);
-            left_arm.setPosition(0.05);
+            right_arm.setPosition(1);
+            left_arm.setPosition(0);
         }
 
         // toggle the arms
@@ -239,13 +239,13 @@ public class PowerPlayMechanisms extends OpMode {
 
         } else if (gamepad2.right_trigger > 0.01) {
             if(flag2){
-                if(((rightLiftMotor.getCurrentPosition() + 75) < 1000) && ((leftLiftMotor.getCurrentPosition() + 75) < 1000) ){
+                //if(((rightLiftMotor.getCurrentPosition() + 75) < 1000) && ((leftLiftMotor.getCurrentPosition() + 75) < 1000) ){
                     rPosition = rightLiftMotor.getCurrentPosition() + 75;
                     lPosition = leftLiftMotor.getCurrentPosition() + 75;
                     rightLiftMotor.setTargetPosition(rPosition);
                     leftLiftMotor.setTargetPosition(lPosition);
                     flag2 = false;
-                }
+                //}
             }
 
         } else {
