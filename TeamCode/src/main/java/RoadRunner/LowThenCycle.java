@@ -76,7 +76,7 @@ public class LowThenCycle extends LinearOpMode {
         // turn 90
         drive.turn(Math.toRadians(100));
         // strafe right
-       // drive.followTrajectory(right); possibly not needed
+        // drive.followTrajectory(right); possibly not needed
         // set the arms to the correct position
         rArm.setPosition(0.8);
         lArm.setPosition(0.2);

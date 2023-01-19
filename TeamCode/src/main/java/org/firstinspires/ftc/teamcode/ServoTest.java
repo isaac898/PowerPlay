@@ -12,23 +12,29 @@ public class ServoTest extends OpMode {
     private Servo rArm = null;
     private Servo lArm = null;
 
+    private Servo cServo = null;
+
+
     private DcMotor rlMotor = null;
     private DcMotor llMotor = null;
 
     double rPos = 0;
     double lPos = 0;
 
-    double pow = 0;
-
     @Override
     public void init() {
+        cServo = hardwareMap.get(Servo.class, "cServo");
+        cServo.setDirection(Servo.Direction.REVERSE);
+
+        cServo.setPosition(0.2);
+
         rArm = hardwareMap.get(Servo.class, "rServo");
         lArm = hardwareMap.get(Servo.class, "lServo");
 
         rlMotor = hardwareMap.get(DcMotor.class, "rlMotor");
         llMotor = hardwareMap.get(DcMotor.class, "llMotor");
 
-        rlMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rlMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         llMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // set the motors to run with encoder
@@ -47,11 +53,14 @@ public class ServoTest extends OpMode {
         rlMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         llMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        rArm.setDirection(Servo.Direction.FORWARD);
-        lArm.setDirection(Servo.Direction.REVERSE);
+        rArm.setDirection(Servo.Direction.REVERSE);
+        lArm.setDirection(Servo.Direction.FORWARD);
 
         rArm.setPosition(0);
         lArm.setPosition(0);
+
+        rlMotor.setPower(0.8);
+        llMotor.setPower(0.8);
     }
 
     @Override
@@ -67,13 +76,18 @@ public class ServoTest extends OpMode {
             rPos -= 0.001;
         }
 
-        pow = gamepad1.right_stick_y * 0.5;
+        else if (gamepad1.y) {
+            rlMotor.setTargetPosition(1000);
+            llMotor.setTargetPosition(1000);
+        }
+
+        else if (gamepad1.a) {
+            rlMotor.setTargetPosition(0);
+            llMotor.setTargetPosition(0);
+        }
 
         rArm.setPosition(rPos);
         lArm.setPosition(lPos);
-
-        llMotor.setPower(pow);
-        rlMotor.setPower(pow);
 
         updateTelemetry();
     }
