@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -37,7 +38,8 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@Autonomous
+
+@Autonomous (name = "Auto")
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
     OpenCvCamera camera;
@@ -64,63 +66,63 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
     AprilTagDetection tagOfInterest = null;
 
-    //motor
-    DcMotor fl;
-    DcMotor bl;
-    DcMotor fr;
-    DcMotor br;
+    public static double ANGLE = -51; // deg
 
-    //servo
-    private Servo claw_servo;
-    private Servo right_arm;
-    private Servo left_arm;
+    public static double CORRECT = 15;
+    // VARIABLES FOR THE CLAW
+    private Servo cServo = null;
 
-    public void initialize() {
+    // VARIABLES FOR THE LIFT
+    private DcMotor rlMotor = null;
+    private DcMotor llMotor = null;
+    private Servo rArm = null;
+    private Servo lArm = null;
 
-        //motors
-        fl = hardwareMap.dcMotor.get("fl");
-        bl = hardwareMap.dcMotor.get("bl");
-        fr = hardwareMap.dcMotor.get("fr");
-        br = hardwareMap.dcMotor.get("br");
+    //drive
+    SampleMecanumDrive drive = null;
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.FORWARD);
-        fr.setDirection(DcMotorSimple.Direction.FORWARD);
+    public void setUp() {
+// set up the claw
+        cServo = hardwareMap.get(Servo.class, "cServo");
+        cServo.setDirection(Servo.Direction.REVERSE);
+        telemetry.addData("Motors", "right (%.2f)", cServo.getPosition());
+        // set up the lifts
+        rlMotor = hardwareMap.get(DcMotor.class, "rlMotor");
+        llMotor = hardwareMap.get(DcMotor.class, "llMotor");
 
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //set up the arms
+        rArm = hardwareMap.get(Servo.class, "rServo");
+        lArm = hardwareMap.get(Servo.class, "lServo");
 
-        // set up the two arm servos
-        right_arm = hardwareMap.get(Servo.class, "rServo");
-        left_arm = hardwareMap.get(Servo.class, "lServo");
+        // set the direction of the lift motors
+        rlMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        llMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        // set the arm position to the correct positions
-        right_arm.setPosition(0.95);
-        left_arm.setPosition(0.05);
+        // set the motors to run with encoder
+        rlMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        llMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        claw_servo = hardwareMap.get(Servo.class, "cServo");
-        claw_servo.setDirection(Servo.Direction.REVERSE);
-        claw_servo.setPosition(0);
+        // set target to zero
+        rlMotor.setTargetPosition(0);
+        llMotor.setTargetPosition(0);
 
-        //odometry
+        // stop and reset the encoders
+        rlMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        llMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-//            fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // set the mode to run using position
+        rlMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        llMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rlMotor.setPower(0.8);
+        llMotor.setPower(0.8);
 
     }
 
     @Override
     public void runOpMode()
     {
-        initialize();
+        setUp();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -225,34 +227,14 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         }
 
         /* Actually do something useful */
-        if(tagOfInterest == null || tagOfInterest.id == twodot)
-        {
-            arm();
-            sleep(secondsToMilli(1));
-            timedTranslate(1, 0.3, 2);
-            timedTranslate(1, 0.5, 0);
-            timedTranslate(1, 0.5, 0);
-            timedTranslate(1, -0.5, 0);
-            right_arm.setPosition(0.95);
-            left_arm.setPosition(0.05);
-        } else if (tagOfInterest.id == onedot) {
-            arm();
-            sleep(secondsToMilli(1));
-            timedTranslate(1, 0.3, 2);
-            timedTranslate(1, 0.6, 2);
-            sleep(secondsToMilli(1));
-            timedTranslate(1, 0.5, 0);
-            right_arm.setPosition(0.95);
-            left_arm.setPosition(0.05);
-        } else if (tagOfInterest.id == threedot) {
-            arm();
-            sleep(secondsToMilli(1));
-            timedTranslate(1, 0.2, 2);
-            timedTranslate(1, 0.6, 1);
-            sleep(secondsToMilli(1));
-            timedTranslate(1, 0.5, 0);
-            right_arm.setPosition(0.95);
-            left_arm.setPosition(0.05);
+        if(tagOfInterest == null || tagOfInterest.id == twodot) { //location 2
+            autonomous(2);
+
+        } else if (tagOfInterest.id == onedot) { //location 1
+            autonomous(1);
+
+        } else if (tagOfInterest.id == threedot) { //location 3
+            autonomous(3);
         }
 
 
@@ -271,44 +253,19 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 
-    public int secondsToMilli(int seconds) {
-        int milliseconds = 1000 * seconds;
-        return milliseconds;
-    }
 
-    public void arm() {
-        right_arm.setPosition(0.92); //0.95 lowest
-        left_arm.setPosition(0.08); //0.05 lowest
-    }
-
-    //seconds can only be int, so change power if needed to shorten distance, 1 = right, 2 = left, 0 = yk
-
-    public void timedTranslate(int seconds, double power, int direction) {
-        double flPow = power;
-        double blPow = power;
-        double frPow = power;
-        double brPow = power;
-        if (direction == 1) {
-            blPow = -power;
-            frPow = -power;
-        } else if (direction == 2) {
-            flPow = -power;
-            brPow = -power;
+    public void autonomous(int parkingSpotNumber) {
+        //PASTE ENTIRE runOpMode CODE HERE
+        //parking
+        if (parkingSpotNumber == 1) { //parking spot 1
+            //put parking movement in here
         }
-
-        fl.setPower(flPow);
-        fr.setPower(frPow);
-        bl.setPower(blPow);
-        br.setPower(brPow);
-
-        sleep(secondsToMilli(seconds));
-        motorStop();
+        else if (parkingSpotNumber == 2) { //parking spot 2
+            //put parking movement in here
+        }
+        else if (parkingSpotNumber == 3) { //parking spot 3
+            //put parking movement in here
+        }
     }
-
-    public void motorStop() {
-        fl.setPower(0);
-        fr.setPower(0);
-        bl.setPower(0);
-        br.setPower(0);
-    }
+    //put extra functions down here
 }
