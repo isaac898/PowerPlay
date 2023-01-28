@@ -43,36 +43,43 @@ public class LowThenCycle extends LinearOpMode {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
-                .forward(7)
-                .build();
-        Trajectory left = left(17);
-        Trajectory forward = forward(48);
-        Trajectory right = right(5);
-        Trajectory forward2 = forward(27);
-        Trajectory back = back(26);
-        Trajectory back2 = back(14);
+//        Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
+//                .forward(7)
+//                .build();
+//        Trajectory left = left(17);
+//        Trajectory forward = forward(48);
+//        Trajectory right = right(5);
+//        Trajectory forward2 = forward(27);
+//        Trajectory back = back(26);
+//        Trajectory back2 = back(14);
+        Trajectory forward0 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(7, 0)).build();
+        Trajectory left0 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(0, 17)).build();
+        Trajectory forward1 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(48, 0)).build();
+        Trajectory forward2 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(27, 0)).build();
+        Trajectory back = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(-26, 0)).build();
+        Trajectory back2 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(-8, 0)).build();
+
 
         waitForStart();
 
         if (isStopRequested()) return;
 
         closeClaw();
-        drive.followTrajectory(for16);
+        drive.followTrajectory(forward0);
         setArms();
         sleep(1000);
-        drive.turn(Math.toRadians(-50));
-        drive.followTrajectory(for16);
+        drive.turn(Math.toRadians(-47));
+        drive.followTrajectory(forward0);
         openClaw();
 
         // return back to straight
-        drive.turn(Math.toRadians(50));
+        drive.turn(Math.toRadians(47));
         //go left
-        drive.followTrajectory(left); // done
+        drive.followTrajectory(left0); // done
         drive.turn(Math.toRadians(CORRECT)); // correct
         dropArms();
         // go forward
-        drive.followTrajectory(forward);
+        drive.followTrajectory(forward1);
         // turn 90
         drive.turn(Math.toRadians(100));
         // strafe right
@@ -90,7 +97,7 @@ public class LowThenCycle extends LinearOpMode {
         // go back
         drive.followTrajectory(back);
         // turn 50 degrees
-        drive.turn(Math.toRadians(59));
+        drive.turn(Math.toRadians(50));
         // set the junction high
         highJunction();
         // move back

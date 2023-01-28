@@ -154,7 +154,7 @@ public class PowerPlayMechanisms extends OpMode {
 
 
         // CODE FOR THE CLAW // works
-        if (gamepad2.right_bumper) { // open the claw
+        if (gamepad1.left_trigger != 0) { // open the claw
             claw_servo.setPosition(0.5);
         }
         if(gamepad2.left_bumper) { // close the claw
@@ -168,8 +168,8 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the lift motors to move to the set positions at the same time
         //works
         if (gamepad2.dpad_up){ // high junction
-            rightLiftMotor.setTargetPosition(1000);
-            leftLiftMotor.setTargetPosition(1000);
+            rightLiftMotor.setTargetPosition(1143);
+            leftLiftMotor.setTargetPosition(1143);
         }
 
         if(gamepad2.dpad_left){ // middle junction
@@ -185,8 +185,8 @@ public class PowerPlayMechanisms extends OpMode {
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
         if (gamepad2.y){ // go high
-            right_arm.setPosition(0.45);
-            left_arm.setPosition(0.55);
+            right_arm.setPosition(0.2); // 0.25
+            left_arm.setPosition(0.8); // 0.75
         }
         if (gamepad2.x) { // go mid
             right_arm.setPosition(0.6); // closer to one, means lower
@@ -194,8 +194,8 @@ public class PowerPlayMechanisms extends OpMode {
         }
 
         if (gamepad2.a){ // go low
-            right_arm.setPosition(0.95);
-            left_arm.setPosition(0.05);
+            right_arm.setPosition(1);
+            left_arm.setPosition(0);
         }
 
         // toggle the arms

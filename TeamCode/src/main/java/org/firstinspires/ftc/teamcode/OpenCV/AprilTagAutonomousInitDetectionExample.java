@@ -21,6 +21,10 @@
 
 package org.firstinspires.ftc.teamcode.OpenCV;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,6 +32,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.apriltag.AprilTagDetection;
@@ -123,6 +128,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     public void runOpMode()
     {
         setUp();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -235,6 +241,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
         } else if (tagOfInterest.id == threedot) { //location 3
             autonomous(3);
+
         }
 
 
@@ -256,16 +263,191 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
     public void autonomous(int parkingSpotNumber) {
         //PASTE ENTIRE runOpMode CODE HERE
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        // setting up all the motors and servos
+        telemetry.addData("Status", "initialized ");
+        telemetry.update();
+
+        drive = new SampleMecanumDrive(hardwareMap);
+
+
+        Trajectory forward0 = forward(7); // 7 was old
+        Trajectory left = left(11);
+        Trajectory forward = forward(19);
+        Trajectory right = right(5);
+        Trajectory forward2 = forward(25);
+        Trajectory back = back(26);
+        Trajectory forward3 = forward(14);
+        Trajectory forward4 = forward(25);
+        Trajectory strafeLeft = left(32);
+        Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
+                .forward(4)
+                .build();
+        Trajectory back3 = back(10); // 6 was old
+        Trajectory back2 = back(10);
+        Trajectory back1 = back(10);
+
+//        Trajectory leftCorrect = left(10);
+//        Trajectory strafeHigh = left(52);
+
+
+
+        if (isStopRequested()) return;
+//        closeClaw();
+//        drive.followTrajectory(leftCorrect);
+//        drive.turn(-85);
+//        drive.followTrajectory(strafeHigh);
+//        drive.turn(85);
+//        setArms();
+//        highJunction();
+
+        closeClaw();
+        drive.followTrajectory(forward0);
+        setArms();
+        sleep(1000);
+        drive.turn(Math.toRadians(-37));
+       // drive.followTrajectory(for16);
+        // set to lower
+//        rArm.setPosition(0.6);
+//        lArm.setPosition(0.4);
+        openClaw();
+//        setArms();
+        drive.turn(Math.toRadians(37));
+        drive.followTrajectory(left);
+        drive.turn(Math.toRadians(-70));
+        dropArms();
+//
+//        drive.followTrajectory(strafeLeft);
+//        drive.turn(Math.toRadians(175));
+//        rArm.setPosition(0.8);
+//        lArm.setPosition(0.2);
+//        drive.followTrajectory(forward2);
+//        closeClaw();
+//        sleep(500);
+//        outTheBack();
+//        drive.followTrajectory(back);
+//        drive.turn(Math.toRadians(59));
+//        highJunction();
+//        drive.followTrajectory(back2);
+//        openClaw();
+//        sleep(500);
+//        dropArms();
+//        drive.followTrajectory(forward3);
+//        lowJunction();
+
+//        // return back to straight
+//        drive.turn(Math.toRadians(50));
+//        //go left
+//        drive.followTrajectory(left); // done
+//        drive.turn(Math.toRadians(CORRECT)); // correct
+//        // go forward
+//        drive.followTrajectory(forward);
+//        // turn 90
+//        drive.turn(Math.toRadians(73));
+//        // strafe right
+//        // drive.followTrajectory(right); possibly not needed
+//        // set the arms to the correct position
+//        rArm.setPosition(0.8);
+//        lArm.setPosition(0.2);
+//        // go forward
+//        drive.followTrajectory(forward2);
+//        // close claw
+//        closeClaw();
+//        sleep(500);
+//        // set arms
+//        outTheBack();
+//        // go back
+//        drive.followTrajectory(back);
+//        // turn 50 degrees
+//        drive.turn(Math.toRadians(59));
+//        // set the junction high
+//        highJunction();
+//        // move back
+//        drive.followTrajectory(back2);
+//        // open the claw
+//        sleep(500);
+//        openClaw();
+//        dropArms(); // drop the arms
+//        lowJunction(); // drop the junction
+
         //parking
         if (parkingSpotNumber == 1) { //parking spot 1
-            //put parking movement in here
+//            put parking movement in here
+            drive.followTrajectory(strafeLeft);
+            drive.followTrajectory(back);
+            drive.turn(Math.toRadians(-85));
+            drive.followTrajectory(back2);
+
+
         }
         else if (parkingSpotNumber == 2) { //parking spot 2
             //put parking movement in here
+            drive.followTrajectory(strafeLeft);
+            drive.turn(Math.toRadians(-85));
+            drive.followTrajectory(back3);
+
         }
         else if (parkingSpotNumber == 3) { //parking spot 3
             //put parking movement in here
+           drive.followTrajectory(strafeLeft);
+           drive.followTrajectory(forward);
+           drive.turn(Math.toRadians(-85));
+           drive.followTrajectory(back1);
+
+            while (!isStopRequested() && opModeIsActive());
+
         }
     }
     //put extra functions down here
+    public void closeClaw() {
+        cServo.setPosition(0.2);
+    }
+
+    public void openClaw() {
+        cServo.setPosition(0.5);
+    }
+
+    public void highJunction() {
+        rlMotor.setTargetPosition(1143);
+        llMotor.setTargetPosition(1143);
+    }
+
+    public void lowJunction() {
+        rlMotor.setTargetPosition(0);
+        llMotor.setTargetPosition(0);
+    }
+
+    public void setArms() {
+        rArm.setPosition(0.55);
+        lArm.setPosition(0.45);
+    }
+
+    public void dropArms() {
+        rArm.setPosition(0.95);
+        lArm.setPosition(0.05);
+    }
+    public void outTheBack(){
+        rArm.setPosition(0.2);
+        lArm.setPosition(0.8);
+    }
+
+    public Trajectory left(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).strafeLeft(measurement).build();
+    }
+    public Trajectory right(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).strafeRight(measurement).build();
+    }
+
+    public Trajectory forward(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).forward(measurement).build();
+    }
+
+    public Trajectory back(double measurement) {
+        return drive.trajectoryBuilder(new Pose2d()).back(measurement).build();
+    }
+
+    public void arms(double position) {
+
+    }
 }
