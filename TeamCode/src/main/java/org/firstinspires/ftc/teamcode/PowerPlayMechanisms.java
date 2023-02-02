@@ -12,6 +12,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @TeleOp (name= "Draft2PowerPlay")
 public class PowerPlayMechanisms extends OpMode {
 
@@ -134,19 +138,36 @@ public class PowerPlayMechanisms extends OpMode {
         double drive_x = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x; // random comment
 
-        if(gamepad1.right_trigger == 0){
-            frontLeftPower =   Range.clip(drive_y + drive_x + turn, -0.5, 0.5);
-            frontRightPower = Range.clip(drive_y - drive_x - turn, -0.5, 0.5);
-            backLeftPower =  Range.clip(drive_y - drive_x + turn, -0.5,0.5);
-            backRightPower =   Range.clip(drive_y + drive_x - turn, -0.5, 0.5);
+//        if(gamepad1.right_trigger == 0){
+//            frontLeftPower =   Range.clip(drive_y + drive_x + turn, -0.5, 0.5);
+//            frontRightPower = Range.clip(drive_y - drive_x - turn, -0.5, 0.5);
+//            backLeftPower =  Range.clip(drive_y - drive_x + turn, -0.5,0.5);
+//            backRightPower =   Range.clip(drive_y + drive_x - turn, -0.5, 0.5);
+//
+//        } else {
+//            frontLeftPower =  Range.clip(drive_y + drive_x + turn, -0.7, 0.7);
+//            frontRightPower =  Range.clip(drive_y - drive_x - turn, -0.7, 0.7);
+//            backLeftPower =  Range.clip(drive_y - drive_x + turn, -0.7,0.7);
+//            backRightPower =  Range.clip(drive_y + drive_x - turn, -0.7, 0.7);
+//        }
+        frontLeftPower =   drive_y + drive_x + turn;
+        frontRightPower = drive_y - drive_x - turn;
+        backLeftPower = drive_y - drive_x + turn;
+        backRightPower =   drive_y + drive_x - turn;
 
-        } else {
-            frontLeftPower =  Range.clip(drive_y + drive_x + turn, -0.7, 0.7);
-            frontRightPower =  Range.clip(drive_y - drive_x - turn, -0.7, 0.7);
-            backLeftPower =  Range.clip(drive_y - drive_x + turn, -0.7,0.7);
-            backRightPower =  Range.clip(drive_y + drive_x - turn, -0.7, 0.7);
-        }
+        // store the values in a list of doubles
+        List<Double> list = Arrays.asList(frontLeftPower,frontRightPower, backLeftPower, backRightPower);
 
+        // get the greatest value
+        double maximum = Collections.max(list); // returns the greatest number
+
+        // divide by the maximum
+        frontLeftPower/=maximum;
+        frontRightPower/=maximum;
+        backLeftPower/=maximum;
+        backRightPower/=maximum;
+        
+        // set the powers
         fl.setPower(frontLeftPower);
         fr.setPower(frontRightPower);
         bl.setPower(backLeftPower);
@@ -168,13 +189,13 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the lift motors to move to the set positions at the same time
         //works
         if (gamepad2.dpad_up){ // high junction
-            rightLiftMotor.setTargetPosition(1143);
-            leftLiftMotor.setTargetPosition(1143);
+            rightLiftMotor.setTargetPosition(1415);
+            leftLiftMotor.setTargetPosition(1415);
         }
 
         if(gamepad2.dpad_left){ // middle junction
-            rightLiftMotor.setTargetPosition(251);
-            leftLiftMotor.setTargetPosition(251);
+            rightLiftMotor.setTargetPosition(701);
+            leftLiftMotor.setTargetPosition(701);
         }
 
         if(gamepad2.dpad_down){ // go low
@@ -239,13 +260,11 @@ public class PowerPlayMechanisms extends OpMode {
 
         } else if (gamepad2.right_trigger > 0.01) {
             if(flag2){
-                if(((rightLiftMotor.getCurrentPosition() + 75) < 1000) && ((leftLiftMotor.getCurrentPosition() + 75) < 1000) ){
                     rPosition = rightLiftMotor.getCurrentPosition() + 75;
                     lPosition = leftLiftMotor.getCurrentPosition() + 75;
                     rightLiftMotor.setTargetPosition(rPosition);
                     leftLiftMotor.setTargetPosition(lPosition);
                     flag2 = false;
-                }
             }
 
         } else {
