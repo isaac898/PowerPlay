@@ -16,7 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@TeleOp (name= "Draft2PowerPlay")
+@TeleOp(name = "Draft2PowerPlay")
+
 public class PowerPlayMechanisms extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -97,7 +98,9 @@ public class PowerPlayMechanisms extends OpMode {
         right_arm = hardwareMap.get(Servo.class, "rServo");
         left_arm = hardwareMap.get(Servo.class, "lServo");
 
-
+        //set the positions for the arms to the down position
+        right_arm.setPosition(1);
+        left_arm.setPosition(0);
 
         // set the direction of the motors
         rightLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -150,79 +153,99 @@ public class PowerPlayMechanisms extends OpMode {
 //            backLeftPower =  Range.clip(drive_y - drive_x + turn, -0.7,0.7);
 //            backRightPower =  Range.clip(drive_y + drive_x - turn, -0.7, 0.7);
 //        }
-        frontLeftPower =   drive_y + drive_x + turn;
+        frontLeftPower = drive_y + drive_x + turn;
         frontRightPower = drive_y - drive_x - turn;
         backLeftPower = drive_y - drive_x + turn;
-        backRightPower =   drive_y + drive_x - turn;
+        backRightPower = drive_y + drive_x - turn;
 
         // store the values in a list of doubles
-        List<Double> list = Arrays.asList(frontLeftPower,frontRightPower, backLeftPower, backRightPower);
+        List<Double> list = Arrays.asList(1.0, Math.abs(frontLeftPower), Math.abs(frontRightPower), Math.abs(backLeftPower), Math.abs(backRightPower));
 
         // get the greatest value
         double maximum = Collections.max(list); // returns the greatest number
 
-        // divide by the maximum
-        frontLeftPower/=maximum;
-        frontRightPower/=maximum;
-        backLeftPower/=maximum;
-        backRightPower/=maximum;
-        
+
         // set the powers
-        fl.setPower(frontLeftPower);
-        fr.setPower(frontRightPower);
-        bl.setPower(backLeftPower);
-        br.setPower(backRightPower);
+        fl.setPower((frontLeftPower / maximum) * 0.5);
+        //if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        fr.setPower((frontRightPower / maximum) * 0.5);
+        //if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        bl.setPower((backLeftPower / maximum) * 0.5);
+        //if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        br.setPower((backRightPower / maximum) * 0.5);
+        //if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
 
 
         // CODE FOR THE CLAW // works
         if (gamepad1.left_trigger != 0) { // open the claw
-            claw_servo.setPosition(0.5);
+            claw_servo.setPosition(0.43);
         }
-        if(gamepad2.left_bumper) { // close the claw
+        if (gamepad2.left_bumper) { // close the claw
             claw_servo.setPosition(0.2);
         }
 
+        if(gamepad1.a){
+            claw_servo.setPosition(0.2); // close the claw
 
+            right_arm.setPosition(1); // bring the arm back down
+            left_arm.setPosition(0);
+
+            rightLiftMotor.setTargetPosition(0); // bring the lift down
+            leftLiftMotor.setTargetPosition(0);
+
+            claw_servo.setPosition(0.43); // open the claw
+
+        }
 
         // CODE FOR THE LIFT
         // 3.138 : 1 ratio old to new junction position
         // set up the lift motors to move to the set positions at the same time
         //works
-        if (gamepad2.dpad_up){ // high junction
-            rightLiftMotor.setTargetPosition(1415);
-            leftLiftMotor.setTargetPosition(1415);
+        if (gamepad2.dpad_up) { // high junction
+            rightLiftMotor.setTargetPosition(1547);
+            leftLiftMotor.setTargetPosition(1547);
+
         }
 
-        if(gamepad2.dpad_left){ // middle junction
-            rightLiftMotor.setTargetPosition(701);
-            leftLiftMotor.setTargetPosition(701);
+        if (gamepad2.dpad_left) { // middle junction
+            rightLiftMotor.setTargetPosition(1083);
+            leftLiftMotor.setTargetPosition(1083);
+
+
         }
 
-        if(gamepad2.dpad_down){ // go low
-            rightLiftMotor.setTargetPosition(0);
-            leftLiftMotor.setTargetPosition(0);
+        if (gamepad2.dpad_down) { // go low
+            rightLiftMotor.setTargetPosition(434);
+           leftLiftMotor.setTargetPosition(434);
+
         }
+
+
+//        // testing the is busy method
+//        while(rightLiftMotor.isBusy()){
+//
+//        }
 
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
-        if (gamepad2.y){ // go high
-            right_arm.setPosition(0.2); // 0.25
-            left_arm.setPosition(0.8); // 0.75
+        if (gamepad2.y) { // go high
+            right_arm.setPosition(0.3); // 0.25
+            left_arm.setPosition(0.7); // 0.75
         }
         if (gamepad2.x) { // go mid
-            right_arm.setPosition(0.6); // closer to one, means lower
-            left_arm.setPosition(0.4); // closer to zero, means lower
+            right_arm.setPosition(0.65); // closer to one, means lower
+            left_arm.setPosition(0.35); // closer to zero, means lower
         }
 
-        if (gamepad2.a){ // go low
+        if (gamepad2.a) { // go low
             right_arm.setPosition(1);
             left_arm.setPosition(0);
         }
 
         // toggle the arms
-        if(gamepad2.dpad_right){
-            if(flag) {
-                if((right_arm.getPosition() > 0.45) && (left_arm.getPosition() < 0.55)) {
+        if (gamepad2.dpad_right) {
+            if (flag) {
+                if ( ( (right_arm.getPosition() - 0.05) > 0.3) && ( (left_arm.getPosition() + 0.05) < 0.7) ) {
                     leftPosition = left_arm.getPosition() + 0.05;
                     rightPosition = right_arm.getPosition() - 0.05;
                 }
@@ -232,8 +255,8 @@ public class PowerPlayMechanisms extends OpMode {
 
                 flag = false;
             }
-        } else if (gamepad2.b){
-            if(flag){
+        } else if (gamepad2.b) {
+            if (flag) {
                 leftPosition = left_arm.getPosition() - 0.05;
                 rightPosition = right_arm.getPosition() + 0.05;
 
@@ -259,12 +282,15 @@ public class PowerPlayMechanisms extends OpMode {
             }
 
         } else if (gamepad2.right_trigger > 0.01) {
-            if(flag2){
+            if (flag2) {
+                if( ( (rightLiftMotor.getCurrentPosition() + 75) < 1547) && ( (leftLiftMotor.getCurrentPosition() + 75) < 1547) ) {
                     rPosition = rightLiftMotor.getCurrentPosition() + 75;
                     lPosition = leftLiftMotor.getCurrentPosition() + 75;
+
                     rightLiftMotor.setTargetPosition(rPosition);
                     leftLiftMotor.setTargetPosition(lPosition);
-                    flag2 = false;
+                }
+                flag2 = false;
             }
 
         } else {
@@ -277,22 +303,20 @@ public class PowerPlayMechanisms extends OpMode {
         // the left is going to go from zero to 0.4
 
 
-
-
-
-        telemetry.addData("Status", "Rune Time: " + runtime.toString() );
-        telemetry.addData("Encoder count Right: ", + rightLiftMotor.getCurrentPosition());
-        telemetry.addData("Encoder Counts Left: ", + leftLiftMotor.getCurrentPosition());
+        telemetry.addData("Status", "Rune Time: " + runtime.toString());
+        telemetry.addData("Encoder count Right: ", +rightLiftMotor.getCurrentPosition());
+        telemetry.addData("Encoder count left: ", + leftLiftMotor.getCurrentPosition());
+        telemetry.addData("Absolute encoder right: ", + Math.abs(rightLiftMotor.getCurrentPosition()));
+        // tests to see when the power
+//        telemetry.addData("Encoder Counts Left: ", +leftLiftMotor.getCurrentPosition()2);
         telemetry.addData("Motors", "front left (%.2f), front right (%.2f), back left (%.2f), back right (%.2f)", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
-        telemetry.addData("Gamepad coordinates","(x,y) = (%.2f, %.2f), turn = %.2f", drive_x, drive_y, turn);
-        telemetry.addData("Servo Position", "Claw position: (%5.2f)" , claw_servo.getPosition());
+        telemetry.addData("Gamepad coordinates", "(x,y) = (%.2f, %.2f), turn = %.2f", drive_x, drive_y, turn);
+        telemetry.addData("Servo Position", "Claw position: (%5.2f)", claw_servo.getPosition());
         telemetry.addData("Servo", "right arm:  (%.2f)", right_arm.getPosition());
         telemetry.addData("Servo", "left arm: (%.2f)", left_arm.getPosition());
 
 
-
         telemetry.update();
-
 
 
     }
