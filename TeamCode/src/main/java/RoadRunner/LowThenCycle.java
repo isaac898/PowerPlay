@@ -43,72 +43,85 @@ public class LowThenCycle extends LinearOpMode {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-//        Trajectory for16 = drive.trajectoryBuilder(new Pose2d())
-//                .forward(7)
-//                .build();
-//        Trajectory left = left(17);
-//        Trajectory forward = forward(48);
-//        Trajectory right = right(5);
-//        Trajectory forward2 = forward(27);
-//        Trajectory back = back(26);
-//        Trajectory back2 = back(14);
-        Trajectory forward0 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(7, 0)).build();
-        Trajectory left0 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(0, 17)).build();
-        Trajectory forward1 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(48, 0)).build();
-        Trajectory forward2 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(27, 0)).build();
-        Trajectory back = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(-26, 0)).build();
-        Trajectory back2 = drive.trajectoryBuilder(new Pose2d()).lineToLinearHeading(new Pose2d(-8, 0)).build();
+        //needed voltage = 14.21
+
+        // segment one variables
+        Trajectory left = left(89);
+        Trajectory back1 = back(9);
+        // segment one variables all work ( if it doesn't work then its the angle that you start at or the power
+
+        // segment two variables
+        Trajectory forward1 = forward(6);
+        Trajectory right = right(20); // might change to 20
+        Trajectory forward2 = forward(22);
+        Trajectory back2 = back(23);
+        Trajectory left1 = left(20.5);
+        Trajectory back3 = back(10);
+        // variables all work for a power -- we have been mainly using 14.38 to 14.39
+        // but the recent trial showed that even 14.3 worked
+
+        // last forward
+        Trajectory finalForward = forward(8);
 
 
         waitForStart();
 
         if (isStopRequested()) return;
-
+// segment one :: score on the high junction
         closeClaw();
-        drive.followTrajectory(forward0);
-        setArms();
-        sleep(1000);
-        drive.turn(Math.toRadians(-47));
-        drive.followTrajectory(forward0);
-        openClaw();
-
-        // return back to straight
-        drive.turn(Math.toRadians(47));
-        //go left
-        drive.followTrajectory(left0); // done
-        drive.turn(Math.toRadians(CORRECT)); // correct
-        dropArms();
-        // go forward
-        drive.followTrajectory(forward1);
-        // turn 90
-        drive.turn(Math.toRadians(100));
-        // strafe right
-        // drive.followTrajectory(right); possibly not needed
-        // set the arms to the correct position
-        rArm.setPosition(0.8);
-        lArm.setPosition(0.2);
-        // go forward
-        drive.followTrajectory(forward2);
-        // close claw
-        closeClaw();
-        sleep(500);
-        // set arms
-        outTheBack();
-        // go back
-        drive.followTrajectory(back);
-        // turn 50 degrees
-        drive.turn(Math.toRadians(50));
-        // set the junction high
+        sleep(250);
+        liftaLittle();
+        drive.followTrajectory(left);
         highJunction();
-        // move back
-        drive.followTrajectory(back2);
-        // open the claw
-        sleep(500);
+        sleep(250);
+        outTheBack();
+        outTheBack();
+        sleep(250);
+        drive.followTrajectory(back1);
+        sleep(250);
         openClaw();
+        // segment one works
 
+        // segment two :: pick up the first cone of the stakc and score it
+        drive.followTrajectory(forward1);
+        drive.followTrajectory(right); // might need to be adjusted
+        drive.turn(Math.toRadians(21));
+        sleep(150);
+        reset();
+        drive.followTrajectory(forward2);
+        sleep(150);
+        closeClaw();
+//        reachForIt();
+//        sleep(250);
+//        drive.followTrajectory(back2);
+//        outTheBack();
+//        sleep(250);
+//        drive.followTrajectory(left1);
+//        drive.followTrajectory(back3);
+//        sleep(250);
+//        openClaw();
+        // segment two works okay, some adjustments might need to be made
 
-
-
+//        // segment three
+//        drive.followTrajectory(forward1);
+//        drive.followTrajectory(right); // might need to be adjusted
+//        reset();
+//        drive.followTrajectory(forward2);
+//        sleep(150);
+//        closeClaw();
+//        reachForIt();
+//        sleep(250);
+//        drive.followTrajectory(back2);
+//        outTheBack();
+//        sleep(250);
+//        drive.followTrajectory(left1);
+//        drive.followTrajectory(back3);
+//        sleep(250);
+//        openClaw();
+//
+//        // end
+        drive.followTrajectory(finalForward);
+        totalReset();
 
         while (!isStopRequested() && opModeIsActive());
 
@@ -120,22 +133,61 @@ public class LowThenCycle extends LinearOpMode {
     }
 
     public void openClaw() {
-        cServo.setPosition(0.5);
+        cServo.setPosition(0.43);
+    }
+
+    public void reachForIt() {
+        rlMotor.setTargetPosition(1595);
+        llMotor.setTargetPosition(1595);
+    }
+
+    public void reset(){
+        closeClaw();
+        sleep(250);
+        firstCone();
+//        midPoint();
+        sleep(250);
+        low();
+        sleep(300);
+        openClaw();
+
+    }
+
+    public void totalReset(){
+        closeClaw();
+        sleep(250);
+        resetArms();
+        sleep(250);
+        low();
+        openClaw();
+    }
+
+    public void firstCone(){
+        rArm.setPosition(0.8);
+        lArm.setPosition(0.2);
+    }
+    public void midPoint(){
+        rArm.setPosition(0.65);
+        lArm.setPosition(0.35);
     }
 
     public void highJunction() {
-        rlMotor.setTargetPosition(1143);
-        llMotor.setTargetPosition(1143);
+        rlMotor.setTargetPosition(1547);
+        llMotor.setTargetPosition(1547);
+    }
+    public void liftaLittle(){
+        rlMotor.setTargetPosition(300);
+        llMotor.setTargetPosition(300);
     }
 
-    public void lowJunction() {
+    public void low() {
         rlMotor.setTargetPosition(0);
         llMotor.setTargetPosition(0);
     }
 
-    public void setArms() {
-        rArm.setPosition(0.55);
-        lArm.setPosition(0.45);
+    public void resetArms() {
+        rArm.setPosition(1);
+        lArm.setPosition(0);
     }
 
     public void dropArms() {
@@ -143,8 +195,8 @@ public class LowThenCycle extends LinearOpMode {
         lArm.setPosition(0.05);
     }
     public void outTheBack(){
-        rArm.setPosition(0.2);
-        lArm.setPosition(0.8);
+        rArm.setPosition(0.3);
+        lArm.setPosition(0.7);
     }
 
     public Trajectory left(double measurement) {
@@ -162,9 +214,6 @@ public class LowThenCycle extends LinearOpMode {
         return drive.trajectoryBuilder(new Pose2d()).back(measurement).build();
     }
 
-    public void arms(double position) {
-
-    }
     public void setUp(){
         // set up the claw
         cServo = hardwareMap.get(Servo.class, "cServo");

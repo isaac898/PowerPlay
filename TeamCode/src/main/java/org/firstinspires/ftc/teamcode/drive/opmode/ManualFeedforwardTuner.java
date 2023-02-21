@@ -117,6 +117,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
                     Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
                     double currentVelo = poseVelo.getX();
+                    currentVelo = currentVelo * -1;
 
                     // update telemetry
                     telemetry.addData("targetVelocity", motionState.getV());

@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Arrays;
@@ -122,8 +123,8 @@ public class PowerPlayMechanisms extends OpMode {
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        rightLiftMotor.setPower(0.8);
-        leftLiftMotor.setPower(0.8);
+        rightLiftMotor.setPower(0.9);
+        leftLiftMotor.setPower(0.9);
 
         telemetry.update();
     }
@@ -166,34 +167,59 @@ public class PowerPlayMechanisms extends OpMode {
 
 
         // set the powers
-        fl.setPower((frontLeftPower / maximum) * 0.5);
-        //if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        fr.setPower((frontRightPower / maximum) * 0.5);
-        //if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        bl.setPower((backLeftPower / maximum) * 0.5);
-        //if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        br.setPower((backRightPower / maximum) * 0.5);
-        //if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        fl.setPower((frontLeftPower / maximum) * 0.6);
+        if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+
+        fr.setPower((frontRightPower / maximum) * 0.6);
+        if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+
+        bl.setPower((backLeftPower / maximum) * 0.6);
+        if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+
+        br.setPower((backRightPower / maximum) * 0.6);
+        if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+
+        if(gamepad1.right_trigger > 0.01){
+            fl.setPower((frontLeftPower / maximum) * 0.8);
+            fr.setPower((frontRightPower / maximum) * 0.8);
+            bl.setPower((backLeftPower / maximum) * 0.8);
+            br.setPower((backRightPower / maximum) * 0.8);
+        }
+
+        if(gamepad1.right_bumper){
+            fl.setPower((frontLeftPower / maximum) * 0.4);
+            fr.setPower((frontRightPower / maximum) * 0.4);
+            bl.setPower((backLeftPower / maximum) * 0.4);
+            br.setPower((backRightPower / maximum) * 0.4);
+        }
 
 
         // CODE FOR THE CLAW // works
         if (gamepad1.left_trigger != 0) { // open the claw
             claw_servo.setPosition(0.43);
+        } else {
+            claw_servo.setPosition(0.2); // close the claw
         }
-        if (gamepad2.left_bumper) { // close the claw
+
+        if (gamepad2.right_bumper) { // close the claw
             claw_servo.setPosition(0.2);
         }
 
-        if(gamepad1.a){
-            claw_servo.setPosition(0.2); // close the claw
-
+        if(gamepad1.x){
             right_arm.setPosition(1); // bring the arm back down
             left_arm.setPosition(0);
 
             rightLiftMotor.setTargetPosition(0); // bring the lift down
             leftLiftMotor.setTargetPosition(0);
 
-            claw_servo.setPosition(0.43); // open the claw
+            if(rightLiftMotor.getCurrentPosition() == 0){
+                claw_servo.setPosition(0.43);
+            } else if (leftLiftMotor.getCurrentPosition() == 0){
+                claw_servo.setPosition(0.43);
+            } else {
+                claw_servo.setPosition(0.43);
+            }
+
 
         }
 
@@ -202,8 +228,8 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the lift motors to move to the set positions at the same time
         //works
         if (gamepad2.dpad_up) { // high junction
-            rightLiftMotor.setTargetPosition(1547);
-            leftLiftMotor.setTargetPosition(1547);
+            rightLiftMotor.setTargetPosition(16100);
+            leftLiftMotor.setTargetPosition(16100);
 
         }
 
@@ -214,11 +240,17 @@ public class PowerPlayMechanisms extends OpMode {
 
         }
 
-        if (gamepad2.dpad_down) { // go low
+        if(gamepad2.dpad_right){
             rightLiftMotor.setTargetPosition(434);
-           leftLiftMotor.setTargetPosition(434);
+            leftLiftMotor.setTargetPosition(434);
+        }
+
+        if (gamepad2.dpad_down) { // go low
+            rightLiftMotor.setTargetPosition(0);
+           leftLiftMotor.setTargetPosition(0);
 
         }
+
 
 
 //        // testing the is busy method
@@ -229,8 +261,8 @@ public class PowerPlayMechanisms extends OpMode {
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
         if (gamepad2.y) { // go high
-            right_arm.setPosition(0.3); // 0.25
-            left_arm.setPosition(0.7); // 0.75
+            right_arm.setPosition(0.2); // 0.25
+            left_arm.setPosition(0.8); // 0.75
         }
         if (gamepad2.x) { // go mid
             right_arm.setPosition(0.65); // closer to one, means lower
@@ -243,9 +275,9 @@ public class PowerPlayMechanisms extends OpMode {
         }
 
         // toggle the arms
-        if (gamepad2.dpad_right) {
+        if (gamepad2.left_bumper) {
             if (flag) {
-                if ( ( (right_arm.getPosition() - 0.05) > 0.3) && ( (left_arm.getPosition() + 0.05) < 0.7) ) {
+                if ( ( (right_arm.getPosition() - 0.05) > 0.2) && ( (left_arm.getPosition() + 0.05) < 0.8) ) {
                     leftPosition = left_arm.getPosition() + 0.05;
                     rightPosition = right_arm.getPosition() - 0.05;
                 }
@@ -283,7 +315,7 @@ public class PowerPlayMechanisms extends OpMode {
 
         } else if (gamepad2.right_trigger > 0.01) {
             if (flag2) {
-                if( ( (rightLiftMotor.getCurrentPosition() + 75) < 1547) && ( (leftLiftMotor.getCurrentPosition() + 75) < 1547) ) {
+                if( ( (rightLiftMotor.getCurrentPosition() + 75) < 2000) && ( (leftLiftMotor.getCurrentPosition() + 75) < 2000) ) {
                     rPosition = rightLiftMotor.getCurrentPosition() + 75;
                     lPosition = leftLiftMotor.getCurrentPosition() + 75;
 
@@ -319,5 +351,12 @@ public class PowerPlayMechanisms extends OpMode {
         telemetry.update();
 
 
+    }
+    public final void waitUntil(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
