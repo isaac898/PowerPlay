@@ -187,22 +187,22 @@ public class PowerPlayMechanisms extends OpMode {
         }
 
         if(gamepad1.right_bumper){
-            fl.setPower((frontLeftPower / maximum) * 0.4);
-            fr.setPower((frontRightPower / maximum) * 0.4);
-            bl.setPower((backLeftPower / maximum) * 0.4);
-            br.setPower((backRightPower / maximum) * 0.4);
+            fl.setPower((frontLeftPower / maximum) * 0.2);
+            fr.setPower((frontRightPower / maximum) * 0.2);
+            bl.setPower((backLeftPower / maximum) * 0.2);
+            br.setPower((backRightPower / maximum) * 0.2);
         }
 
 
         // CODE FOR THE CLAW // works
         if (gamepad1.left_trigger != 0) { // open the claw
-            claw_servo.setPosition(0.43);
+            claw_servo.setPosition(0.2);
         } else {
-            claw_servo.setPosition(0.2); // close the claw
+            claw_servo.setPosition(0.43); // close the claw
         }
 
         if (gamepad2.right_bumper) { // close the claw
-            claw_servo.setPosition(0.2);
+            claw_servo.setPosition(0.43);
         }
 
         if(gamepad1.x){
@@ -213,11 +213,11 @@ public class PowerPlayMechanisms extends OpMode {
             leftLiftMotor.setTargetPosition(0);
 
             if(rightLiftMotor.getCurrentPosition() == 0){
-                claw_servo.setPosition(0.43);
+                claw_servo.setPosition(0.2);
             } else if (leftLiftMotor.getCurrentPosition() == 0){
-                claw_servo.setPosition(0.43);
+                claw_servo.setPosition(0.2);
             } else {
-                claw_servo.setPosition(0.43);
+                claw_servo.setPosition(0.2);
             }
 
 
@@ -228,8 +228,8 @@ public class PowerPlayMechanisms extends OpMode {
         // set up the lift motors to move to the set positions at the same time
         //works
         if (gamepad2.dpad_up) { // high junction
-            rightLiftMotor.setTargetPosition(16100);
-            leftLiftMotor.setTargetPosition(16100);
+            rightLiftMotor.setTargetPosition(1610);
+            leftLiftMotor.setTargetPosition(1610);
 
         }
 
@@ -261,13 +261,13 @@ public class PowerPlayMechanisms extends OpMode {
 
         // CODE FOR LIFTING AND DROPPING THE ARMS // works
         if (gamepad2.y) { // go high
-            right_arm.setPosition(0.2); // 0.25
-            left_arm.setPosition(0.8); // 0.75
+            right_arm.setPosition(0.1); // 0.25
+            left_arm.setPosition(0.9); // 0.75
         }
-        if (gamepad2.x) { // go mid
-            right_arm.setPosition(0.65); // closer to one, means lower
-            left_arm.setPosition(0.35); // closer to zero, means lower
-        }
+//        if (gamepad2.x) { // go mid
+//            right_arm.setPosition(0.65); // closer to one, means lower
+//            left_arm.setPosition(0.35); // closer to zero, means lower
+//        }
 
         if (gamepad2.a) { // go low
             right_arm.setPosition(1);
@@ -277,7 +277,7 @@ public class PowerPlayMechanisms extends OpMode {
         // toggle the arms
         if (gamepad2.left_bumper) {
             if (flag) {
-                if ( ( (right_arm.getPosition() - 0.05) > 0.2) && ( (left_arm.getPosition() + 0.05) < 0.8) ) {
+                if ( ( (right_arm.getPosition() - 0.05) > 0.05) && ( (left_arm.getPosition() + 0.05) < 0.95) ) {
                     leftPosition = left_arm.getPosition() + 0.05;
                     rightPosition = right_arm.getPosition() - 0.05;
                 }
@@ -315,7 +315,7 @@ public class PowerPlayMechanisms extends OpMode {
 
         } else if (gamepad2.right_trigger > 0.01) {
             if (flag2) {
-                if( ( (rightLiftMotor.getCurrentPosition() + 75) < 2000) && ( (leftLiftMotor.getCurrentPosition() + 75) < 2000) ) {
+                if( ( (rightLiftMotor.getCurrentPosition() + 75) < 1610) && ( (leftLiftMotor.getCurrentPosition() + 75) < 1610) ) {
                     rPosition = rightLiftMotor.getCurrentPosition() + 75;
                     lPosition = leftLiftMotor.getCurrentPosition() + 75;
 
