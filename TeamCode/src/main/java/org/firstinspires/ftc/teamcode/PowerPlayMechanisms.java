@@ -268,6 +268,7 @@ public class PowerPlayMechanisms extends OpMode {
 //            right_arm.setPosition(0.65); // closer to one, means lower
 //            left_arm.setPosition(0.35); // closer to zero, means lower
         // to make the push push
+
 //        }
 
         if (gamepad2.a) { // go low
